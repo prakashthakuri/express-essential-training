@@ -8,6 +8,16 @@ const PORT = 3000
 //this is for the public folder for the path
 app.use(express.static('public'))
 
+// app.use(express.json()) //builin middleware
+
+app.use(express.urlencoded({extended: true})) //application/urlencoded
+
+
+app.post('/newItem', (req,res) => {
+    console.log(req.body)
+    res.send(req.body)
+})
+
 //images folder  on the path images
 
 app.use('/images', express.static('images'))
@@ -19,9 +29,18 @@ app.get('/', (req, res) =>
     res.json(data)
 )
 
-//improvised with route
-app.route('/download')
+//JSON Data
+
+// {"Hello": "This JSON is cool"}
+// URL Encoced data 
+// hello=urlENcoded+is+cool
+
+//improvised with route chaining
+app.route('/item')
         .get((req, res) => {
+            //handiling error
+
+            throw new Error()
         // res.redirect('https://linkedin.com')
         res.download('/images/techcity.jpg')
 
@@ -33,10 +52,19 @@ app.route('/download')
 
 app.get('/item/:id', (req, res, next) => {
 
+
+    //this is the middleware that pulls the data
     console.log(req.params.id)
     let user = Number(req.params.id)
     console.log(user)
     console.log(data[user])
+
+    //middleware that uses the request object
+    console.log(`Request from: ${req.originalUrl}`)
+    console.log(`Request type: ${req.method}`)
+
+    //everything above is middleware
+
     res.send(data[user])
     next()
 }, (req,res) =>
@@ -62,6 +90,17 @@ app.post('/newItem', (req, res) =>
 app.delete('/item', (req, res) => 
     res.send(`a delete request with /item route on the port ${PORT}`)
 )
+
+//Erroe Handling function
+
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).send(`Red alert! \n ${err.stack}`)
+
+})
+// Error Handling ends here
+
+
 app.listen(PORT, () =>
 
     console.log(`Your server is running on ${PORT}`),
