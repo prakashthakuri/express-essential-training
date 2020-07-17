@@ -15,6 +15,10 @@ app.use(express.static('public'))
 app.use(express.urlencoded({extended: true})) //application/urlencoded
 
 
+//This is for proxies
+
+app.set('trust proxy', 'loopback')
+
 app.post('/newItem', (req,res) => {
     console.log(req.body)
     res.send(req.body)
