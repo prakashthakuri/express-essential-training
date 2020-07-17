@@ -1,4 +1,6 @@
 const express = require('express')
+const favicon = require('serve-favicon')
+const path = require('path')
 const data = require('./data/data.json')
 const app = express()
 const PORT = 3000
@@ -21,6 +23,10 @@ app.post('/newItem', (req,res) => {
 //images folder  on the path images
 
 app.use('/images', express.static('images'))
+
+//third party midleware favicon
+
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 
 app.get('/', (req, res) => 
